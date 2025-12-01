@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "prisma generate && prisma db push && npm run prisma:seed && next build",
-  "start": "next start",
-  "lint": "next lint",
-  "register-admin": "node scripts/runner.js",
-  "prisma:seed": "node scripts/seed-runner.js",
-  "deploy": "chmod +x deploy.sh && ./deploy.sh"
+    "dev": "next dev",
+    "build": "prisma generate && prisma db push && npm run prisma:seed && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "register-admin": "node scripts/runner.js",
+    "prisma:seed": "node scripts/seed-runner.js",
+    "deploy": "chmod +x deploy.sh && ./deploy.sh"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^3.9.0",
     "@next/swc-wasm-nodejs": "13.5.1",
     "@prisma/client": "^6.12.0",

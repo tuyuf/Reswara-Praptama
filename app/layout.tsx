@@ -3,6 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Onest } from 'next/font/google';
 import VisitTracker from '@/components/VisitTracker';
+import Chatbot from "@/components/Chatbot";
 
 const onest = Onest({ subsets: ['latin'] });
 
@@ -98,6 +99,7 @@ export default function RootLayout({
       <body className={onest.className}>
         <VisitTracker />
         {children}
+        <Chatbot />
       </body>
     </html>
   );
