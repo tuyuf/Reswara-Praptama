@@ -1,66 +1,58 @@
 // components/ProjectsSection.tsx
 "use client";
 
-import React, { useState } from 'react'; // Pastikan React diimpor
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import AnimatedSection from './AnimatedSection';
 import ProjectCard from './ProjectCard';
 import { Button } from '@/components/ui/button';
-
-interface Project {
-  title: string;
-  category: string;
-  description: string;
-  image: string;
-  client?: string;
-  completedDate?: string;
-}
+import { ProjectFactory, BaseProject, RawProjectData } from '@/lib/project-models'; // Import Class OOP
 
 interface ProjectsSectionProps {
   title: string;
   subtitle: string;
   categories: string[];
-  projects: Project[];
+  projects: RawProjectData[]; // Data mentah dari props
   isHomePage?: boolean;
   displayBackgroundCard?: boolean;
 }
 
-const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, displayBackgroundCard = true }: ProjectsSectionProps) => {
+const ProjectsSection = ({ 
+  title, 
+  subtitle, 
+  categories, 
+  projects, 
+  isHomePage, 
+  displayBackgroundCard = true 
+}: ProjectsSectionProps) => {
   const [activeCategory, setActiveCategory] = useState('Semua');
 
+  // ==========================================
+  // 2. OBJEK (OBJECT) - Transformasi Data ke Objek OOP
+  // ==========================================
+  // Kita mengubah data JSON mentah menjadi Array of Objects (BaseProject)
+  // Menggunakan useMemo agar tidak dibuat ulang setiap render kecuali data berubah
+  const projectObjects: BaseProject[] = useMemo(() => {
+    return projects.map(p => ProjectFactory.createProject(p));
+  }, [projects]);
+
+  // Filter logika menggunakan method dari Class
   const filteredProjects = activeCategory === 'Semua'
-    ? projects
-    : projects.filter(project => project.category === activeCategory);
+    ? projectObjects
+    : projectObjects.filter(project => project.getCategory() === activeCategory); // Menggunakan Getter
 
   const projectsToDisplay = isHomePage ? filteredProjects.slice(0, 6) : filteredProjects;
   const showLoadMoreButton = (filteredProjects.length > 6) && isHomePage;
 
-  const getCategoryColor = (category: string) => {
-    const colorMap: { [key: string]: string } = {
-      // 'Perencanaan & Desain': 'bg-blue-500',
-      // 'Pengawasan': 'bg-green-500',
-      // 'Perizinan': 'bg-yellow-500',
-      // 'Studi': 'bg-purple-500',
-      // 'Pengadaan Tanah': 'bg-red-500',
-      // 'Pekerja Lain': 'bg-gray-500'
-    };
-    return colorMap[category] || 'bg-black/50 backdrop-blur-sm';
-  };
-
   const content = (
     <>
-      {/* Header */}
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          {title}
-        </h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          {subtitle}
-        </p>
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{title}</h2>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">{subtitle}</p>
       </div>
 
-      {/* Category Filter */}
+      {/* Filter Category */}
       <div className="flex flex-wrap justify-center gap-3 mb-12">
         <div className="bg-gray-50 rounded-2xl p-2 flex flex-wrap gap-2">
           {categories.map((category) => (
@@ -79,27 +71,27 @@ const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, di
         </div>
       </div>
 
-      {/* Projects Grid dan View All Projects Button */}
-      <div className="relative"> {/* Kontainer relative untuk grid dan gradien */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {projectsToDisplay.map((project, index) => (
+      <div className="relative">
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projectsToDisplay.map((projectObj, index) => (
             <ProjectCard
-              key={project.title}
-              title={project.title}
-              description={project.description}
-              imageUrl={project.image}
-              category={project.category}
-              client={project.client}
-              completedDate={project.completedDate}
-              categoryColor={getCategoryColor(project.category)}
+              // Menggunakan Getter/Method dari Objek untuk mendapatkan data
+              key={index + projectObj.getTitle()} 
+              title={projectObj.getTitle()}
+              description={projectObj.getDescription()}
+              imageUrl={projectObj.getImage()}
+              category={projectObj.getCategory()}
+              
+              // ENCAPSULATION & POLYMORPHISM in Action:
+              // Kita tidak perlu logika 'if' di sini. Objek 'projectObj' sudah tahu
+              // cara menampilkan client dan warnanya sendiri.
+              client={projectObj.getClientDisplay()} 
+              completedDate={projectObj.getDateDisplay()}
+              categoryColor={projectObj.getCategoryColor()} 
             />
           ))}
         </motion.div>
 
-        {/* View All Projects Button, di atas gradien */}
         {showLoadMoreButton && (
           <div className="absolute inset-x-0 bottom-0 pt-16 pb-6 flex justify-center items-end z-10">
             <Link href="/portfolio" passHref>
@@ -110,7 +102,6 @@ const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, di
           </div>
         )}
         
-        {/* Overlay gradien untuk efek fade, dari bawah ke atas, lebih tinggi */}
         {filteredProjects.length > 6 && isHomePage && (
           <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none"></div>
         )}
