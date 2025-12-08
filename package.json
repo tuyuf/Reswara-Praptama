@@ -60,6 +60,7 @@
     "eslint-config-next": "^15.4.4",
     "formidable": "^3.5.4",
     "framer-motion": "^12.23.9",
+    "groq-sdk": "^0.37.0",
     "input-otp": "^1.2.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.446.0",
