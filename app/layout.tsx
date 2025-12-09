@@ -3,7 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Onest } from 'next/font/google';
 import VisitTracker from '@/components/VisitTracker';
-import Chatbot from "@/components/Chatbot";
+import ChatbotClass from '@/components/oop/ChatbotClass';
 
 const onest = Onest({ subsets: ['latin'] });
 
@@ -96,10 +96,10 @@ export default function RootLayout({
         <meta name="geo.position" content="-6.966667;110.416664" />
         <meta name="ICBM" content="-6.966667, 110.416664" />
       </head>
-      <body className={onest.className}>
+      <body className={onest.className} suppressHydrationWarning>
         <VisitTracker />
         {children}
-        <Chatbot />
+        <ChatbotClass />
       </body>
     </html>
   );

@@ -85,7 +85,7 @@ class ChatbotClass extends Component<{}, ChatbotState> {
       return (
         <button
           onClick={() => this.setState({ isOpen: true })}
-          className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-xl hover:scale-105 transition-transform"
+          className="fixed bottom-6 right-6 bg-[#2a5f91] text-white p-4 rounded-full shadow-xl hover:scale-105 transition-transform"
         >
           <MessageCircle size={28} />
         </button>
@@ -96,7 +96,7 @@ class ChatbotClass extends Component<{}, ChatbotState> {
     return (
       <div className="fixed bottom-6 right-6 w-[90vw] md:w-96 h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden font-sans z-50">
         {/* Header */}
-        <div className="bg-blue-700 p-4 text-white flex justify-between items-center">
+        <div className="bg-[#2a5f91] p-4 text-white flex justify-between items-center">
           <h3 className="font-bold">Reswara Bot (OOP)</h3>
           <button onClick={() => this.setState({ isOpen: false })}>
             <X size={20} />
@@ -110,7 +110,7 @@ class ChatbotClass extends Component<{}, ChatbotState> {
               <div
                 className={`max-w-[85%] p-3 text-sm rounded-2xl ${
                   msg.role === "user"
-                    ? "bg-blue-600 text-white rounded-br-none"
+                    ? "bg-[#2a5f91] text-white rounded-br-none"
                     : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
                 }`}
               >
@@ -130,13 +130,13 @@ class ChatbotClass extends Component<{}, ChatbotState> {
             onChange={(e) => this.setState({ input: e.target.value })}
             onKeyDown={(e) => e.key === "Enter" && this.handleSendMessage()}
             placeholder="Tulis pesan..."
-            className="flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-500"
+            className="flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-[#2a5f91] focus:ring-1 focus:ring-[#2a5f91] text-gray-800"
             disabled={isLoading}
           />
           <button
             onClick={this.handleSendMessage}
             disabled={isLoading || !input.trim()}
-            className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 disabled:bg-gray-300"
+            className="bg-[#2a5f91] text-white p-2 rounded-full hover:bg-[#2a5f91] disabled:bg-gray-300"
           >
             <Send size={18} />
           </button>
